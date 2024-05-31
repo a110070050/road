@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>選擇頁面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+	        height: 100vh; /* 使body的高度等於視窗的高度 */
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 4px;
+            text-align: center;
+            width: 80%;
+            height: 100%;
+            max-width: 600px;
+        }
+        .hidden {
+            display: none;
+        }
+        h1{}
+        .logo {
+            display: flex;
+            width: 200px;
+            height: auto;
+            padding-left: 200px;
+            margin-top: 50px;
+            margin-bottom: 50px; /* 調整為適合的值 */
+        }
+        .button, .country-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #cfcfcf;
+            color: white;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .button:hover, .country-button:hover {
+            background-color: #8d8d8d;
+        }
+        .dropdown {
+            margin-bottom: 20px;
+        }
+        .dropdown select {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .results {
+            margin-top: 30px;
+        }
+        .result-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .result-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+        .result-item div {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div id="page1" class="container">
+        <h1>Roming the global</h1>
+        <img src="https://via.placeholder.com/100" alt="LOGO" class="logo">
+        <div class="button" onclick="goToPage2()">GO!</div>
+    </div>
+
+    <div id="page2" class="container hidden">
+        <h1>國家</h1>
+        <div class="country-button" onclick="selectCountry('日本')">日本</div>
+        <div class="country-button" onclick="selectCountry('韓國')">韓國</div>
+        <div class="country-button" onclick="selectCountry('泰國')">泰國</div>
+        <div></div>
+        <div class="country-button" onclick="selectCountry('美國')">美國</div>
+        <div class="country-button" onclick="selectCountry('義大利')">義大利</div>
+        <div class="country-button" onclick="selectCountry('法國')">法國</div>
+    </div>
+
+    <div id="page3" class="container hidden">
+        <h1 id="country-title">日本</h1>
+        <div class="dropdown">
+            <label for="city">城市:</label>
+            <select id="city">
+                <option value="">選擇類型</option>
+                <option value="東京">東京</option>
+                <option value="大阪">大阪</option>
+                <!-- 城市選項將由 JavaScript 動態生成 -->
+            </select>
+        </div>
+        <div class="dropdown">
+            <label for="type">類型:</label>
+            <select id="type">
+                <option value="">選擇類型</option>
+                <option value="市區">市區</option>
+                <option value="觀光">觀光</option>
+                <option value="鄉村">鄉村</option>
+            </select>
+        </div>
+        
+        <button style="font-size: larger;" class="button" onclick="search()">搜尋</button>
+        <div class="results" id="results">
+            <!-- 搜尋結果將顯示在這裡 -->
+        </div>
+        <div style="font-size:medium;" class="country-button" onclick="">上一頁</div>
+    </div>
+
+    <script>
+        const countryData = {
+            "日本": ["東京", "大阪"],
+        };
+        function goToPreviousPage() {
+            document.getElementById('page3').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+        }
+
+        function goToPage2() {
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+        }
+
+        function selectCountry(country) {
+            document.getElementById('country-title').textContent = country;
+            document.getElementById('page2').classList.add('hidden');
+            document.getElementById('page3').classList.remove('hidden');
+
+            // 更新城市選項
+            const cities = countryData[country];
+            const cityDropdown = document.getElementById('city');
+            cityDropdown.innerHTML = '<option value="">選擇城市</option>';
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                cityDropdown.appendChild(option);
+            });
+        }
+
+        function search() {
+            const city = document.getElementById('city').value;
+            const type = document.getElementById('type').value;
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+
+            // 模擬搜尋結果
+            const filteredData = [
+                { city: '東京', type: '歷史', name: '東京鐵塔', img: 'https://via.placeholder.com/50' },
+                { city: '東京', type: '歷史', name: '淺草寺', img: 'https://via.placeholder.com/50' },
+                { city: '東京', type: '自然', name: '秋葉原', img: 'https://via.placeholder.com/50' },
+                { city: '東京', type: '休閒', name: '銀座', img: 'https://via.placeholder.com/50' },
+                { city: '東京', type: '自然', name: '新宿', img: 'https://via.placeholder.com/50' },
+                { city: '東京', type: '自然', name: '河口湖', img: 'https://via.placeholder.com/50' },
+                { city: '東京', type: '休閒', name: '澀谷', img: 'https://via.placeholder.com/50' },
+                { city: '大阪', type: '休閒', name: '環球影城', img: 'https://via.placeholder.com/50' },
+                { city: '大阪', type: '自然', name: '大阪城公園', img: 'https://via.placeholder.com/50' },
+                { city: '大阪', type: '歷史', name: '通天閣', img: 'https://via.placeholder.com/50' },
+                { city: '大阪', type: '休閒', name: '心齋橋', img: 'https://via.placeholder.com/50' },
+                { city: '大阪', type: '歷史', name: '鶴岡八幡宮', img: 'https://via.placeholder.com/50' },
+                { city: '大阪', type: '自然', name: '湘南海岸', img: 'https://via.placeholder.com/50' },
+            ];
+
+            filteredData.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `<img src="${item.img}" alt="${item.name}"><div>${item.name}<br>(${item.city}) (${item.type})</div>`;
+                results.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
